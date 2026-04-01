@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="お問い合わせ・訂正依頼"
+  description="信光への情報提供、訂正依頼、お問い合わせはこちらのフォームからお送りください。"
+>
+  <div class="mx-auto max-w-2xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'お問い合わせ' }]} />
+
+    <h1 class="mb-4 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">
+      お問い合わせ・訂正依頼
+    </h1>
+    <p class="mb-8 text-navy-600 dark:text-navy-400">
+      記事の訂正依頼、情報提供、その他お問い合わせは以下のフォームからお送りください。
+      原則5営業日以内にご連絡いたします。
+    </p>
+
+    <form class="space-y-6" action="#" method="post">
+      <div>
+        <label for="contact-type" class="mb-1 block text-sm font-medium text-navy-800 dark:text-ivory-100">
+          お問い合わせ種別
+        </label>
+        <select
+          id="contact-type"
+          name="type"
+          required
+          class="w-full rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+        >
+          <option value="">選択してください</option>
+          <option value="correction">訂正依頼</option>
+          <option value="information">情報提供</option>
+          <option value="deletion">削除依頼</option>
+          <option value="question">ご質問</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="contact-url" class="mb-1 block text-sm font-medium text-navy-800 dark:text-ivory-100">
+          対象記事のURL（任意）
+        </label>
+        <input
+          id="contact-url"
+          type="url"
+          name="url"
+          placeholder="https://sinko.jp/articles/..."
+          class="w-full rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 placeholder-navy-400 dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+        />
+      </div>
+
+      <div>
+        <label for="contact-name" class="mb-1 block text-sm font-medium text-navy-800 dark:text-ivory-100">
+          お名前（ニックネーム可）
+        </label>
+        <input
+          id="contact-name"
+          type="text"
+          name="name"
+          required
+          class="w-full rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+        />
+      </div>
+
+      <div>
+        <label for="contact-email" class="mb-1 block text-sm font-medium text-navy-800 dark:text-ivory-100">
+          メールアドレス
+        </label>
+        <input
+          id="contact-email"
+          type="email"
+          name="email"
+          required
+          class="w-full rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+        />
+      </div>
+
+      <div>
+        <label for="contact-message" class="mb-1 block text-sm font-medium text-navy-800 dark:text-ivory-100">
+          内容
+        </label>
+        <textarea
+          id="contact-message"
+          name="message"
+          required
+          rows="6"
+          class="w-full rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="rounded-md bg-navy-700 px-6 py-2.5 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+      >
+        送信する
+      </button>
+    </form>
+
+    <div class="mt-8 rounded-md border border-navy-200 bg-ivory-100 p-4 dark:border-navy-600 dark:bg-navy-800">
+      <p class="text-xs text-navy-600 dark:text-navy-400">
+        <strong>ご注意：</strong>
+        個別の法律相談、心理相談、脱会支援のご相談は、
+        <a href="/special/support/" class="underline">専門の支援窓口</a>
+        をご利用ください。信光編集部は相談対応機関ではありません。
+      </p>
+    </div>
+  </div>
+</BaseLayout>

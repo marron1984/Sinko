@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="プライバシーポリシー"
+  description="信光における個人情報の取り扱い、Cookie、アクセス解析について説明します。"
+>
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'ポリシー' }, { label: 'プライバシーポリシー' }]} />
+
+    <article class="prose">
+      <h1>プライバシーポリシー</h1>
+      <p class="text-sm text-navy-500 dark:text-navy-400">最終更新: 2026年3月1日</p>
+
+      <h2>1. 収集する情報</h2>
+      <p>本サイトでは、以下の情報を収集する場合があります：</p>
+      <ul>
+        <li><strong>ニュースレター登録</strong>：メールアドレス</li>
+        <li><strong>お問い合わせフォーム</strong>：お名前、メールアドレス、お問い合わせ内容</li>
+        <li><strong>アクセス解析</strong>：IPアドレス（匿名化）、閲覧ページ、参照元、デバイス情報</li>
+        <li><strong>Cookie</strong>：テーマ設定（ダークモード）等のユーザー設定の保存</li>
+      </ul>
+
+      <h2>2. 情報の利用目的</h2>
+      <ul>
+        <li>ニュースレターの配信</li>
+        <li>お問い合わせへの回答</li>
+        <li>サイトの改善・運営に関する分析</li>
+      </ul>
+
+      <h2>3. 第三者への提供</h2>
+      <p>
+        法令に基づく場合を除き、収集した個人情報を第三者に提供することはありません。
+      </p>
+
+      <h2>4. 広告について</h2>
+      <p>
+        本サイトでは第三者配信の広告サービスを利用する場合があります。
+        これらのサービスは、ユーザーの興味に応じた広告を表示するためにCookieを使用することがあります。
+      </p>
+
+      <h2>5. お問い合わせ</h2>
+      <p>
+        プライバシーに関するご質問は、<a href="/contact">お問い合わせフォーム</a>よりご連絡ください。
+      </p>
+    </article>
+  </div>
+</BaseLayout>

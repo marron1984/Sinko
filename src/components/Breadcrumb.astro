@@ -1,0 +1,34 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+const allItems = [{ label: 'ホーム', href: '/' }, ...items];
+---
+
+<nav aria-label="パンくずリスト" class="mb-6">
+  <ol class="flex flex-wrap items-center gap-1 text-sm text-navy-500 dark:text-navy-400">
+    {allItems.map((item, i) => (
+      <li class="flex items-center gap-1">
+        {i > 0 && (
+          <span aria-hidden="true" class="text-navy-300 dark:text-navy-600">/</span>
+        )}
+        {item.href && i < allItems.length - 1 ? (
+          <a href={item.href} class="hover:text-navy-700 dark:hover:text-ivory-200">
+            {item.label}
+          </a>
+        ) : (
+          <span class="text-navy-700 dark:text-ivory-200" aria-current={i === allItems.length - 1 ? 'page' : undefined}>
+            {item.label}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

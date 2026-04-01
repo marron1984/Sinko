@@ -1,0 +1,146 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection } from 'astro:content';
+import { categories } from '@/lib/categories';
+import { buildJsonLdWebSite } from '@/lib/seo';
+
+const allArticles = await getCollection('articles', ({ data }) => data.status === 'published');
+const sortedArticles = allArticles.sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+const latestArticles = sortedArticles.slice(0, 6);
+---
+
+<BaseLayout
+  title=""
+  description="新興宗教をめぐる論点整理・社会背景・制度・報道・証言・二次被害防止を扱う調査報道メディア。事実と出典に基づく中立的な情報提供。"
+  jsonLd={buildJsonLdWebSite()}
+>
+  <!-- Hero -->
+  <section class="border-b border-navy-100 bg-gradient-to-b from-ivory-50 to-ivory-100 dark:border-navy-700 dark:from-navy-900 dark:to-navy-800">
+    <div class="mx-auto max-w-6xl px-4 py-12 md:py-16">
+      <h1 class="mb-4 font-serif text-3xl font-bold leading-tight text-navy-900 dark:text-ivory-50 md:text-4xl">
+        信光<span class="ml-2 text-lg font-normal text-navy-500 dark:text-navy-400">Sinko</span>
+      </h1>
+      <p class="max-w-2xl text-lg leading-relaxed text-navy-700 dark:text-navy-300">
+        新興宗教をめぐる論点整理・社会背景・制度・報道を扱う調査報道メディアです。<br class="hidden md:inline" />
+        事実と出典に基づく中立的な情報を通じ、公共的な議論に資することを目指します。
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="/special/support/"
+          class="inline-flex items-center rounded-md bg-navy-700 px-4 py-2 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+        >
+          相談窓口を見る
+        </a>
+        <a
+          href="/categories/basics/"
+          class="inline-flex items-center rounded-md border border-navy-300 px-4 py-2 text-sm font-medium text-navy-700 hover:bg-navy-50 dark:border-navy-600 dark:text-navy-300 dark:hover:bg-navy-800"
+        >
+          基礎知識から読む
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest articles -->
+  <section class="mx-auto max-w-6xl px-4 py-12">
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="font-serif text-xl font-bold text-navy-900 dark:text-ivory-50">新着記事</h2>
+      <a href="/articles/" class="text-sm text-navy-600 hover:text-navy-800 dark:text-navy-400 dark:hover:text-ivory-200">
+        すべて見る &rarr;
+      </a>
+    </div>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {latestArticles.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          slug={article.id}
+          category={article.data.category}
+          publishedAt={article.data.publishedAt}
+          updatedAt={article.data.updatedAt}
+          tags={article.data.tags}
+          summary={article.data.summary}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="border-t border-navy-100 bg-ivory-100/50 dark:border-navy-700 dark:bg-navy-800/30">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <h2 class="mb-8 font-serif text-xl font-bold text-navy-900 dark:text-ivory-50">カテゴリ</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {categories.map((cat) => (
+          <a
+            href={`/categories/${cat.slug}/`}
+            class="group rounded-lg border border-navy-100 bg-white p-5 transition-shadow hover:shadow-md dark:border-navy-700 dark:bg-navy-800"
+          >
+            <h3 class="mb-1.5 font-serif text-base font-bold text-navy-900 group-hover:text-navy-600 dark:text-ivory-50 dark:group-hover:text-navy-300">
+              {cat.name}
+            </h3>
+            <p class="text-sm leading-relaxed text-navy-600 dark:text-navy-400">
+              {cat.description}
+            </p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="mb-8 font-serif text-xl font-bold text-navy-900 dark:text-ivory-50">資料・ツール</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <a href="/special/timeline/" class="rounded-lg border border-navy-100 bg-white p-5 transition-shadow hover:shadow-md dark:border-navy-700 dark:bg-navy-800">
+        <h3 class="mb-1 font-serif font-bold text-navy-900 dark:text-ivory-50">年表</h3>
+        <p class="text-sm text-navy-600 dark:text-navy-400">主要な出来事を時系列で整理</p>
+      </a>
+      <a href="/special/glossary/" class="rounded-lg border border-navy-100 bg-white p-5 transition-shadow hover:shadow-md dark:border-navy-700 dark:bg-navy-800">
+        <h3 class="mb-1 font-serif font-bold text-navy-900 dark:text-ivory-50">用語集</h3>
+        <p class="text-sm text-navy-600 dark:text-navy-400">重要な用語の定義と解説</p>
+      </a>
+      <a href="/special/faq/" class="rounded-lg border border-navy-100 bg-white p-5 transition-shadow hover:shadow-md dark:border-navy-700 dark:bg-navy-800">
+        <h3 class="mb-1 font-serif font-bold text-navy-900 dark:text-ivory-50">FAQ</h3>
+        <p class="text-sm text-navy-600 dark:text-navy-400">よくある質問と回答</p>
+      </a>
+      <a href="/special/support/" class="rounded-lg border border-navy-100 bg-white p-5 transition-shadow hover:shadow-md dark:border-navy-700 dark:bg-navy-800">
+        <h3 class="mb-1 font-serif font-bold text-navy-900 dark:text-ivory-50">支援窓口</h3>
+        <p class="text-sm text-navy-600 dark:text-navy-400">相談・支援機関の一覧</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="border-t border-navy-100 dark:border-navy-700">
+    <div class="mx-auto max-w-2xl px-4 py-12">
+      <Newsletter />
+    </div>
+  </section>
+
+  <!-- About / Trust -->
+  <section class="border-t border-navy-100 bg-ivory-100/50 dark:border-navy-700 dark:bg-navy-800/30">
+    <div class="mx-auto max-w-4xl px-4 py-12 text-center">
+      <h2 class="mb-4 font-serif text-xl font-bold text-navy-900 dark:text-ivory-50">編集方針</h2>
+      <p class="mx-auto max-w-2xl text-sm leading-relaxed text-navy-600 dark:text-navy-400">
+        信光は、すべての記事に出典を明示し、事実と意見・未確認情報を区別します。
+        特定の宗教や信仰を否定・肯定することは目的とせず、
+        社会問題としての側面を公正に整理することを編集方針としています。
+      </p>
+      <div class="mt-4 flex flex-wrap justify-center gap-4">
+        <a href="/policies/editorial/" class="text-sm text-navy-600 underline underline-offset-2 hover:text-navy-800 dark:text-navy-400 dark:hover:text-ivory-200">
+          編集ポリシー
+        </a>
+        <a href="/policies/sources/" class="text-sm text-navy-600 underline underline-offset-2 hover:text-navy-800 dark:text-navy-400 dark:hover:text-ivory-200">
+          情報源ポリシー
+        </a>
+        <a href="/policies/corrections/" class="text-sm text-navy-600 underline underline-offset-2 hover:text-navy-800 dark:text-navy-400 dark:hover:text-ivory-200">
+          訂正ポリシー
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

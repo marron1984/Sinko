@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { categories } from '@/lib/categories';
+
+export function getStaticPaths() {
+  return categories.map((cat) => ({
+    params: { slug: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+const { category } = Astro.props;
+const allArticles = await getCollection('articles', ({ data }) => data.status === 'published' && data.category === category.id);
+const sorted = allArticles.sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+---
+
+<BaseLayout
+  title={category.name}
+  description={category.description}
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <Breadcrumb items={[{ label: category.name }]} />
+    <header class="mb-8">
+      <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">{category.name}</h1>
+      <p class="text-navy-600 dark:text-navy-400">{category.description}</p>
+    </header>
+
+    {sorted.length > 0 ? (
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {sorted.map((article) => (
+          <ArticleCard
+            title={article.data.title}
+            description={article.data.description}
+            slug={article.id}
+            category={article.data.category}
+            publishedAt={article.data.publishedAt}
+            updatedAt={article.data.updatedAt}
+            tags={article.data.tags}
+            summary={article.data.summary}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-navy-500 dark:text-navy-400">このカテゴリにはまだ記事がありません。</p>
+    )}
+  </div>
+</BaseLayout>

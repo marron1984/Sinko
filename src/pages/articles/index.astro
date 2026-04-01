@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles', ({ data }) => data.status === 'published');
+const sorted = allArticles.sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+---
+
+<BaseLayout
+  title="記事一覧"
+  description="信光に掲載されたすべての記事の一覧です。新興宗教をめぐる論点整理・社会背景・制度・報道を扱います。"
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <Breadcrumb items={[{ label: '記事一覧' }]} />
+    <h1 class="mb-8 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">記事一覧</h1>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {sorted.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          slug={article.id}
+          category={article.data.category}
+          publishedAt={article.data.publishedAt}
+          updatedAt={article.data.updatedAt}
+          tags={article.data.tags}
+          summary={article.data.summary}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

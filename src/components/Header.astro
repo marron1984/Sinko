@@ -1,0 +1,142 @@
+---
+import { categories } from '@/lib/categories';
+---
+
+<header class="sticky top-0 z-50 border-b border-navy-100 bg-ivory-50/95 backdrop-blur-sm dark:border-navy-700 dark:bg-navy-900/95">
+  <a href="#main-content" class="skip-link">本文へ移動</a>
+  <div class="mx-auto max-w-6xl px-4">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between py-3">
+      <a href="/" class="group flex items-center gap-2" aria-label="信光トップページ">
+        <span class="font-serif text-2xl font-bold tracking-tight text-navy-900 dark:text-ivory-50">
+          信光
+        </span>
+        <span class="hidden text-xs text-navy-500 dark:text-navy-400 sm:inline">
+          Sinko
+        </span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <!-- Search toggle -->
+        <button
+          id="search-toggle"
+          aria-label="検索を開く"
+          class="rounded-md p-2 text-navy-600 hover:bg-navy-50 dark:text-navy-300 dark:hover:bg-navy-800"
+        >
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+
+        <!-- Dark mode toggle -->
+        <button
+          id="theme-toggle"
+          aria-label="テーマを切り替え"
+          class="rounded-md p-2 text-navy-600 hover:bg-navy-50 dark:text-navy-300 dark:hover:bg-navy-800"
+        >
+          <svg class="h-5 w-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg class="hidden h-5 w-5 dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+
+        <!-- Mobile menu toggle -->
+        <button
+          id="menu-toggle"
+          aria-label="メニューを開く"
+          class="rounded-md p-2 text-navy-600 hover:bg-navy-50 dark:text-navy-300 dark:hover:bg-navy-800 lg:hidden"
+        >
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="hidden border-t border-navy-100 py-2 dark:border-navy-700 lg:block" aria-label="メインナビゲーション">
+      <ul class="flex flex-wrap gap-1">
+        {categories.map((cat) => (
+          <li>
+            <a
+              href={`/categories/${cat.slug}/`}
+              class="inline-block rounded-md px-3 py-1.5 text-sm font-medium text-navy-700 transition-colors hover:bg-navy-50 hover:text-navy-900 dark:text-navy-300 dark:hover:bg-navy-800 dark:hover:text-ivory-50"
+            >
+              {cat.name}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href="/special/timeline/"
+            class="inline-block rounded-md px-3 py-1.5 text-sm font-medium text-navy-700 transition-colors hover:bg-navy-50 hover:text-navy-900 dark:text-navy-300 dark:hover:bg-navy-800 dark:hover:text-ivory-50"
+          >
+            年表
+          </a>
+        </li>
+        <li>
+          <a
+            href="/special/glossary/"
+            class="inline-block rounded-md px-3 py-1.5 text-sm font-medium text-navy-700 transition-colors hover:bg-navy-50 hover:text-navy-900 dark:text-navy-300 dark:hover:bg-navy-800 dark:hover:text-ivory-50"
+          >
+            用語集
+          </a>
+        </li>
+        <li>
+          <a
+            href="/special/faq/"
+            class="inline-block rounded-md px-3 py-1.5 text-sm font-medium text-navy-700 transition-colors hover:bg-navy-50 hover:text-navy-900 dark:text-navy-300 dark:hover:bg-navy-800 dark:hover:text-ivory-50"
+          >
+            FAQ
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Search overlay -->
+  <div id="search-overlay" class="hidden border-t border-navy-100 bg-ivory-50 px-4 py-4 dark:border-navy-700 dark:bg-navy-900">
+    <div class="mx-auto max-w-2xl">
+      <form action="/search" method="get" role="search" class="flex gap-2">
+        <label for="search-input" class="sr-only">検索キーワード</label>
+        <input
+          id="search-input"
+          type="search"
+          name="q"
+          placeholder="キーワードで検索..."
+          class="flex-1 rounded-md border border-navy-200 bg-white px-4 py-2 text-sm text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:outline-none dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100 dark:placeholder-navy-400"
+        />
+        <button
+          type="submit"
+          class="rounded-md bg-navy-700 px-4 py-2 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+        >
+          検索
+        </button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Theme toggle
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Search toggle
+  document.getElementById('search-toggle')?.addEventListener('click', () => {
+    const overlay = document.getElementById('search-overlay');
+    overlay?.classList.toggle('hidden');
+    if (!overlay?.classList.contains('hidden')) {
+      document.getElementById('search-input')?.focus();
+    }
+  });
+
+  // Mobile menu toggle
+  document.getElementById('menu-toggle')?.addEventListener('click', () => {
+    document.getElementById('main-nav')?.classList.toggle('hidden');
+  });
+</script>

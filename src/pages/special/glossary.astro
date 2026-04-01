@@ -1,0 +1,67 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+
+const terms = await getCollection('glossary');
+const sorted = terms.sort((a, b) => a.data.reading.localeCompare(b.data.reading, 'ja'));
+
+const grouped = sorted.reduce<Record<string, typeof sorted>>((acc, term) => {
+  const cat = term.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(term);
+  return acc;
+}, {});
+
+const rendered = await Promise.all(
+  sorted.map(async (term) => {
+    const { Content } = await render(term);
+    return { term, Content };
+  })
+);
+const renderedMap = new Map(rendered.map(r => [r.term.id, r]));
+---
+
+<BaseLayout
+  title="用語集"
+  description="新興宗教・カルト問題に関連する重要な用語を解説する用語集です。"
+>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={[{ label: '用語集' }]} />
+    <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">用語集</h1>
+    <p class="mb-8 text-navy-600 dark:text-navy-400">
+      新興宗教・カルト問題に関連する重要な用語の定義と解説です。
+    </p>
+
+    {Object.entries(grouped).map(([category, terms]) => (
+      <section class="mb-10">
+        <h2 class="mb-4 border-b border-navy-100 pb-2 font-serif text-lg font-bold text-navy-900 dark:border-navy-700 dark:text-ivory-50">
+          {category}
+        </h2>
+        <dl class="space-y-6">
+          {terms.map((term) => {
+            const r = renderedMap.get(term.id);
+            return (
+              <div id={term.id} class="scroll-mt-20">
+                <dt class="font-serif text-base font-bold text-navy-800 dark:text-ivory-100">
+                  {term.data.term}
+                  <span class="ml-2 text-sm font-normal text-navy-500 dark:text-navy-400">
+                    （{term.data.reading}）
+                  </span>
+                </dt>
+                <dd class="mt-1 text-sm leading-relaxed text-navy-600 dark:text-navy-400">
+                  {r && <r.Content />}
+                  {term.data.relatedTerms.length > 0 && (
+                    <p class="mt-2 text-xs text-navy-400 dark:text-navy-500">
+                      関連用語: {term.data.relatedTerms.join('、')}
+                    </p>
+                  )}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="ページが見つかりません"
+  description="お探しのページは見つかりませんでした。"
+  noindex={true}
+>
+  <div class="mx-auto max-w-2xl px-4 py-20 text-center">
+    <p class="mb-2 text-6xl font-bold text-navy-200 dark:text-navy-700">404</p>
+    <h1 class="mb-4 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">
+      ページが見つかりません
+    </h1>
+    <p class="mb-8 text-navy-600 dark:text-navy-400">
+      お探しのページは移動または削除された可能性があります。
+      URLをご確認ください。
+    </p>
+
+    <div class="flex flex-col items-center gap-4">
+      <a
+        href="/"
+        class="inline-flex items-center rounded-md bg-navy-700 px-6 py-2.5 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+      >
+        トップページへ
+      </a>
+
+      <div class="text-sm text-navy-500 dark:text-navy-400">
+        <p class="mb-2">お探しの情報はこちらにあるかもしれません：</p>
+        <ul class="space-y-1">
+          <li><a href="/articles/" class="underline hover:text-navy-700 dark:hover:text-ivory-200">記事一覧</a></li>
+          <li><a href="/special/faq/" class="underline hover:text-navy-700 dark:hover:text-ivory-200">よくある質問</a></li>
+          <li><a href="/special/glossary/" class="underline hover:text-navy-700 dark:hover:text-ivory-200">用語集</a></li>
+          <li><a href="/special/support/" class="underline hover:text-navy-700 dark:hover:text-ivory-200">支援窓口</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

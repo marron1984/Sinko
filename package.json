@@ -1,0 +1,26 @@
+{
+  "name": "sinko",
+  "version": "1.0.0",
+  "description": "信光 - 新興宗教をめぐる論点整理・調査報道メディア",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:38479/git/marron1984/Sinko"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.2",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3"
+  }
+}

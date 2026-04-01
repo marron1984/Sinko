@@ -1,0 +1,100 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import LegalDisclaimer from '@/components/LegalDisclaimer.astro';
+import { getCollection, render } from 'astro:content';
+
+const supports = await getCollection('support');
+
+const categoryLabels: Record<string, string> = {
+  general: '総合相談',
+  legal: '法律相談',
+  'mental-health': '心理・メンタルヘルス',
+  family: '家族支援',
+  government: '行政窓口',
+};
+
+const grouped = supports.reduce<Record<string, typeof supports>>((acc, s) => {
+  const cat = s.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(s);
+  return acc;
+}, {});
+
+const renderedMap = new Map<string, { Content: any }>();
+for (const s of supports) {
+  const { Content } = await render(s);
+  renderedMap.set(s.id, { Content });
+}
+---
+
+<BaseLayout
+  title="支援窓口一覧"
+  description="新興宗教・カルト問題に関する相談・支援窓口の一覧です。法律相談、心理支援、家族支援、行政窓口など。"
+>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={[{ label: '支援窓口' }]} />
+    <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">支援窓口一覧</h1>
+    <p class="mb-4 text-navy-600 dark:text-navy-400">
+      新興宗教・カルト問題に関する相談・支援窓口をまとめています。一人で抱え込まず、まずは相談してください。
+    </p>
+
+    <div class="mb-8">
+      <LegalDisclaimer type="general" />
+    </div>
+
+    <!-- Emergency callout -->
+    <div class="mb-8 rounded-lg border-2 border-accent-red/30 bg-red-50/30 p-5 dark:bg-accent-red/5">
+      <p class="mb-1 font-bold text-accent-red">緊急の場合</p>
+      <p class="text-sm text-navy-700 dark:text-navy-300">
+        身体的な危険がある場合は、迷わず <strong>110番（警察）</strong> または <strong>119番（救急）</strong> に連絡してください。
+      </p>
+    </div>
+
+    {Object.entries(grouped).map(([category, items]) => (
+      <section class="mb-10">
+        <h2 class="mb-4 border-b border-navy-100 pb-2 font-serif text-lg font-bold text-navy-900 dark:border-navy-700 dark:text-ivory-50">
+          {categoryLabels[category] ?? category}
+        </h2>
+        <div class="space-y-4">
+          {items.map((item) => {
+            const r = renderedMap.get(item.id);
+            return (
+              <div class="rounded-lg border border-navy-100 bg-white p-5 dark:border-navy-700 dark:bg-navy-800/50">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-serif font-bold text-navy-900 dark:text-ivory-50">{item.data.name}</h3>
+                  {item.data.isVerified && (
+                    <span class="rounded-sm bg-accent-green/10 px-2 py-0.5 text-xs font-medium text-accent-green">
+                      確認済
+                    </span>
+                  )}
+                </div>
+                <p class="mt-1 text-sm text-navy-600 dark:text-navy-400">{item.data.description}</p>
+                <div class="mt-3 flex flex-wrap gap-4 text-sm">
+                  {item.data.phone && (
+                    <a href={`tel:${item.data.phone}`} class="font-medium text-navy-700 dark:text-navy-300">
+                      TEL: {item.data.phone}
+                    </a>
+                  )}
+                  {item.data.url && (
+                    <a href={item.data.url} target="_blank" rel="noopener noreferrer" class="text-navy-600 underline dark:text-navy-400">
+                      公式サイト
+                    </a>
+                  )}
+                  {item.data.hours && (
+                    <span class="text-navy-500 dark:text-navy-400">受付: {item.data.hours}</span>
+                  )}
+                </div>
+                {item.data.lastVerified && (
+                  <p class="mt-2 text-xs text-navy-400 dark:text-navy-500">
+                    最終確認: {new Date(item.data.lastVerified).toLocaleDateString('ja-JP')}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

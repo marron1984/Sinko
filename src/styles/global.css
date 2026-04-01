@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-50: #f0f3f8;
+  --color-navy-100: #d9e0ed;
+  --color-navy-200: #b3c1db;
+  --color-navy-300: #8da2c9;
+  --color-navy-400: #6783b7;
+  --color-navy-500: #4164a5;
+  --color-navy-600: #345084;
+  --color-navy-700: #273c63;
+  --color-navy-800: #1a2842;
+  --color-navy-900: #0d1421;
+
+  --color-ivory-50: #fefdfb;
+  --color-ivory-100: #fdf9f3;
+  --color-ivory-200: #faf3e7;
+  --color-ivory-300: #f5e9d4;
+  --color-ivory-400: #eddcc0;
+
+  --color-accent-red: #c53030;
+  --color-accent-amber: #d69e2e;
+  --color-accent-green: #2f855a;
+
+  --font-serif: "Noto Serif JP", "游明朝", "YuMincho", serif;
+  --font-sans: "Noto Sans JP", "游ゴシック", "YuGothic", sans-serif;
+  --font-mono: "Source Code Pro", monospace;
+}
+
+/* Base styles */
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-ivory-50);
+  color: var(--color-navy-800);
+  line-height: 1.8;
+}
+
+.dark body {
+  background-color: var(--color-navy-900);
+  color: var(--color-ivory-200);
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-navy-900);
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4 {
+  color: var(--color-ivory-50);
+}
+
+/* Article prose */
+.prose {
+  font-size: 1rem;
+  line-height: 1.9;
+  max-width: 42rem;
+}
+
+.prose p {
+  margin-bottom: 1.25em;
+}
+
+.prose h2 {
+  font-size: 1.375rem;
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--color-navy-100);
+}
+
+.dark .prose h2 {
+  border-bottom-color: var(--color-navy-700);
+}
+
+.prose h3 {
+  font-size: 1.125rem;
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+}
+
+.prose a {
+  color: var(--color-navy-600);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dark .prose a {
+  color: var(--color-navy-300);
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-navy-200);
+  padding-left: 1em;
+  color: var(--color-navy-600);
+  font-style: normal;
+  margin: 1.5em 0;
+}
+
+.dark .prose blockquote {
+  border-left-color: var(--color-navy-600);
+  color: var(--color-ivory-300);
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.25em;
+}
+
+.prose li {
+  margin-bottom: 0.375em;
+}
+
+/* Source citation */
+.source-ref {
+  font-size: 0.8125rem;
+  color: var(--color-navy-500);
+  vertical-align: super;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.source-ref:hover {
+  text-decoration: underline;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-navy-800);
+  color: white;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-navy-500);
+  outline-offset: 2px;
+}
+
+/* Sensitive content warning */
+.sensitive-warning {
+  background-color: #fefce8;
+  border: 1px solid var(--color-accent-amber);
+  border-radius: 0.375rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.dark .sensitive-warning {
+  background-color: rgba(214, 158, 46, 0.1);
+}

@@ -1,0 +1,44 @@
+---
+interface SeriesArticle {
+  title: string;
+  slug: string;
+  order: number;
+}
+
+interface Props {
+  seriesName: string;
+  currentOrder: number;
+  articles: SeriesArticle[];
+}
+
+const { seriesName, currentOrder, articles } = Astro.props;
+const sorted = [...articles].sort((a, b) => a.order - b.order);
+const prev = sorted.find((a) => a.order === currentOrder - 1);
+const next = sorted.find((a) => a.order === currentOrder + 1);
+---
+
+<nav class="mt-8 rounded-lg border border-navy-200 bg-navy-50/50 p-5 dark:border-navy-700 dark:bg-navy-800/30" aria-label="シリーズ記事">
+  <p class="mb-3 text-xs font-bold uppercase tracking-wider text-navy-500 dark:text-navy-400">
+    シリーズ: {seriesName}（{currentOrder} / {articles.length}）
+  </p>
+
+  <div class="flex justify-between gap-4">
+    {prev ? (
+      <a href={`/articles/${prev.slug}/`} class="group flex-1 text-left">
+        <span class="text-xs text-navy-400 dark:text-navy-500">前の記事</span>
+        <p class="text-sm font-medium text-navy-700 group-hover:text-navy-900 dark:text-navy-300 dark:group-hover:text-ivory-100">
+          {prev.title}
+        </p>
+      </a>
+    ) : <div class="flex-1" />}
+
+    {next ? (
+      <a href={`/articles/${next.slug}/`} class="group flex-1 text-right">
+        <span class="text-xs text-navy-400 dark:text-navy-500">次の記事</span>
+        <p class="text-sm font-medium text-navy-700 group-hover:text-navy-900 dark:text-navy-300 dark:group-hover:text-ivory-100">
+          {next.title}
+        </p>
+      </a>
+    ) : <div class="flex-1" />}
+  </div>
+</nav>

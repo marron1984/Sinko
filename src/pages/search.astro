@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="検索"
+  description="信光の記事を検索します。"
+  noindex={true}
+>
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={[{ label: '検索' }]} />
+
+    <h1 class="mb-6 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">検索</h1>
+
+    <form action="/search" method="get" role="search" class="mb-8 flex gap-2">
+      <label for="search-page-input" class="sr-only">検索キーワード</label>
+      <input
+        id="search-page-input"
+        type="search"
+        name="q"
+        placeholder="キーワードで検索..."
+        class="flex-1 rounded-md border border-navy-200 bg-white px-4 py-2.5 text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:outline-none dark:border-navy-600 dark:bg-navy-800 dark:text-ivory-100"
+      />
+      <button
+        type="submit"
+        class="rounded-md bg-navy-700 px-6 py-2.5 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+      >
+        検索
+      </button>
+    </form>
+
+    <!-- Search results will be rendered client-side or via a search service -->
+    <div id="search-results">
+      <p class="text-navy-500 dark:text-navy-400">
+        検索キーワードを入力してください。
+      </p>
+    </div>
+
+    <div class="mt-12 border-t border-navy-100 pt-8 dark:border-navy-700">
+      <h2 class="mb-4 font-serif text-lg font-bold text-navy-900 dark:text-ivory-50">
+        よく検索されるキーワード
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {['カルト 定義', '脱会 相談', '宗教法人法', 'マインドコントロール', '宗教二世', '家族 相談'].map((keyword) => (
+          <a
+            href={`/search?q=${encodeURIComponent(keyword)}`}
+            class="rounded-full border border-navy-200 px-3 py-1 text-sm text-navy-600 hover:bg-navy-50 dark:border-navy-600 dark:text-navy-400 dark:hover:bg-navy-800"
+          >
+            {keyword}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate } from '@/lib/utils';
+
+const events = await getCollection('timeline');
+const sorted = events.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const rendered = await Promise.all(
+  sorted.map(async (event) => {
+    const { Content } = await render(event);
+    return { event, Content };
+  })
+);
+---
+
+<BaseLayout
+  title="年表"
+  description="新興宗教に関連する主要な出来事、法改正、事件、判決などを時系列で整理した年表です。"
+>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={[{ label: '年表' }]} />
+    <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">年表</h1>
+    <p class="mb-8 text-navy-600 dark:text-navy-400">
+      新興宗教に関連する主要な出来事を時系列で整理しています。
+    </p>
+
+    <div class="relative">
+      <!-- Timeline line -->
+      <div class="absolute left-4 top-0 h-full w-px bg-navy-200 dark:bg-navy-600" aria-hidden="true"></div>
+
+      <div class="space-y-8">
+        {rendered.map(({ event, Content }) => (
+          <div class="relative pl-12">
+            <!-- Dot -->
+            <div
+              class:list={[
+                'absolute left-2.5 top-1.5 h-3 w-3 rounded-full border-2 border-white dark:border-navy-900',
+                event.data.significance === 'high' ? 'bg-accent-red' : event.data.significance === 'medium' ? 'bg-navy-500' : 'bg-navy-300',
+              ]}
+              aria-hidden="true"
+            ></div>
+
+            <article>
+              <time
+                datetime={event.data.date.toISOString()}
+                class="text-sm font-medium text-navy-500 dark:text-navy-400"
+              >
+                {formatDate(event.data.date)}
+              </time>
+              <h2 class="mt-1 font-serif text-lg font-bold text-navy-900 dark:text-ivory-50">
+                {event.data.title}
+              </h2>
+              <div class="mt-1 flex flex-wrap gap-1.5">
+                <span class="rounded-sm bg-navy-50 px-2 py-0.5 text-xs text-navy-600 dark:bg-navy-700 dark:text-navy-300">
+                  {event.data.category}
+                </span>
+                {event.data.tags.map((tag: string) => (
+                  <span class="text-xs text-navy-400 dark:text-navy-500">#{tag}</span>
+                ))}
+              </div>
+              <div class="prose mt-2 text-sm">
+                <Content />
+              </div>
+              {event.data.sources.length > 0 && (
+                <div class="mt-2 text-xs text-navy-400 dark:text-navy-500">
+                  出典: {event.data.sources.map((s: { label: string }) => s.label).join('; ')}
+                </div>
+              )}
+            </article>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

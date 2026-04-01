@@ -1,0 +1,43 @@
+---
+interface Props {
+  variant?: 'inline' | 'sidebar';
+}
+
+const { variant = 'inline' } = Astro.props;
+---
+
+<aside
+  class:list={[
+    'rounded-lg border border-navy-200 bg-navy-50 p-6 dark:border-navy-600 dark:bg-navy-800',
+    variant === 'sidebar' && 'text-center',
+  ]}
+  aria-label="ニュースレター登録"
+>
+  <h3 class="mb-2 font-serif text-base font-bold text-navy-900 dark:text-ivory-50">
+    ニュースレター
+  </h3>
+  <p class="mb-4 text-sm text-navy-600 dark:text-navy-400">
+    新着記事・特集・重要な更新情報をお届けします。週1回程度、無料配信。
+  </p>
+  <form class="flex gap-2" action="#" method="post">
+    <label for="newsletter-email" class="sr-only">メールアドレス</label>
+    <input
+      id="newsletter-email"
+      type="email"
+      name="email"
+      required
+      placeholder="メールアドレス"
+      class="flex-1 rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800 placeholder-navy-400 focus:border-navy-500 focus:outline-none dark:border-navy-600 dark:bg-navy-700 dark:text-ivory-100"
+    />
+    <button
+      type="submit"
+      class="rounded-md bg-navy-700 px-4 py-2 text-sm font-medium text-white hover:bg-navy-800 dark:bg-navy-600 dark:hover:bg-navy-500"
+    >
+      登録
+    </button>
+  </form>
+  <p class="mt-2 text-xs text-navy-400 dark:text-navy-500">
+    登録はいつでも解除できます。
+    <a href="/policies/privacy/" class="underline">プライバシーポリシー</a>
+  </p>
+</aside>

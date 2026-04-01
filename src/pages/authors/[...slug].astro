@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const authors = await getCollection('authors');
+  return authors.map((author) => ({
+    params: { slug: author.id },
+    props: { author },
+  }));
+}
+
+const { author } = Astro.props;
+const { Content } = await render(author);
+
+const allArticles = await getCollection('articles', ({ data }) =>
+  data.status === 'published' && data.author === author.data.name
+);
+const sorted = allArticles.sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+);
+---
+
+<BaseLayout
+  title={author.data.name}
+  description={author.data.bio}
+>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={[{ label: '著者' }, { label: author.data.name }]} />
+
+    <div class="mb-10">
+      <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">
+        {author.data.name}
+      </h1>
+      <p class="mb-1 text-sm text-navy-500 dark:text-navy-400">{author.data.role}</p>
+      <p class="mb-4 text-navy-600 dark:text-navy-400">{author.data.bio}</p>
+
+      {author.data.expertise.length > 0 && (
+        <div class="mb-4 flex flex-wrap gap-2">
+          {author.data.expertise.map((e: string) => (
+            <span class="rounded-full border border-navy-200 px-3 py-0.5 text-xs text-navy-600 dark:border-navy-600 dark:text-navy-400">
+              {e}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div class="prose text-sm">
+        <Content />
+      </div>
+    </div>
+
+    {sorted.length > 0 && (
+      <section>
+        <h2 class="mb-6 font-serif text-xl font-bold text-navy-900 dark:text-ivory-50">
+          執筆記事
+        </h2>
+        <div class="grid gap-5 md:grid-cols-2">
+          {sorted.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              slug={article.id}
+              category={article.data.category}
+              publishedAt={article.data.publishedAt}
+              tags={article.data.tags}
+              summary={article.data.summary}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

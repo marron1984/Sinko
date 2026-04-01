@@ -1,0 +1,182 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import SensitiveWarning from '@/components/SensitiveWarning.astro';
+import SourceList from '@/components/SourceList.astro';
+import LegalDisclaimer from '@/components/LegalDisclaimer.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import RelatedArticles from '@/components/RelatedArticles.astro';
+import { getCategoryById } from '@/lib/categories';
+import { formatDate, estimateReadingTime } from '@/lib/utils';
+import { buildJsonLdArticle, buildJsonLdBreadcrumb } from '@/lib/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  summary: string[];
+  category: string;
+  tags: string[];
+  author: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  sources: { id: string; label: string; url?: string; accessedAt?: string }[];
+  facts: string[];
+  unverified: string[];
+  editorNote?: string;
+  sensitive: boolean;
+  relatedArticles: { title: string; slug: string; category: string }[];
+  series?: { name: string; order: number };
+  rawContent: string;
+  ogImage?: string;
+}
+
+const {
+  title, description, summary, category, tags, author,
+  publishedAt, updatedAt, sources, facts, unverified,
+  editorNote, sensitive, relatedArticles, rawContent, ogImage,
+} = Astro.props;
+
+const cat = getCategoryById(category as any);
+const readingTime = estimateReadingTime(rawContent);
+const siteUrl = Astro.site?.toString() ?? 'https://sinko.jp';
+const pageUrl = new URL(Astro.url.pathname, siteUrl).toString();
+
+const breadcrumbItems = [
+  ...(cat ? [{ label: cat.name, href: `/categories/${cat.slug}/` }] : []),
+  { label: title },
+];
+
+const articleJsonLd = buildJsonLdArticle({
+  title, description, url: pageUrl, publishedAt, updatedAt, author, ogImage,
+});
+
+const breadcrumbJsonLd = buildJsonLdBreadcrumb([
+  { name: 'ホーム', url: siteUrl },
+  ...(cat ? [{ name: cat.name, url: `${siteUrl}/categories/${cat.slug}/` }] : []),
+  { name: title, url: pageUrl },
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogType="article"
+  publishedAt={publishedAt}
+  updatedAt={updatedAt}
+  author={author}
+  ogImage={ogImage}
+  jsonLd={[articleJsonLd, breadcrumbJsonLd]}
+>
+  <article class="mx-auto max-w-4xl px-4 py-8">
+    <Breadcrumb items={breadcrumbItems} />
+
+    {sensitive && <SensitiveWarning />}
+
+    <!-- Article header -->
+    <header class="mb-8">
+      {cat && (
+        <a
+          href={`/categories/${cat.slug}/`}
+          class="mb-2 inline-block rounded-sm bg-navy-50 px-2 py-0.5 text-xs font-medium text-navy-600 dark:bg-navy-700 dark:text-navy-300"
+        >
+          {cat.name}
+        </a>
+      )}
+
+      <h1 class="mb-4 font-serif text-2xl font-bold leading-tight text-navy-900 dark:text-ivory-50 md:text-3xl">
+        {title}
+      </h1>
+
+      <!-- Meta -->
+      <div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-navy-500 dark:text-navy-400">
+        <a href={`/authors/${author}/`} class="font-medium hover:text-navy-700 dark:hover:text-ivory-200">
+          {author}
+        </a>
+        <time datetime={publishedAt.toISOString()}>
+          {formatDate(publishedAt)}
+        </time>
+        {updatedAt && (
+          <span>
+            更新: <time datetime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time>
+          </span>
+        )}
+        <span>約{readingTime}分で読めます</span>
+      </div>
+
+      <!-- 3-line summary -->
+      <div class="rounded-md border-l-4 border-navy-600 bg-navy-50/50 py-3 pl-4 pr-3 dark:border-navy-400 dark:bg-navy-800/50">
+        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-navy-500 dark:text-navy-400">要約</p>
+        <ul class="space-y-0.5">
+          {summary.map((s) => (
+            <li class="text-sm leading-relaxed text-navy-700 dark:text-navy-300">{s}</li>
+          ))}
+        </ul>
+      </div>
+    </header>
+
+    <!-- Article body -->
+    <div class="prose mx-auto">
+      <slot />
+    </div>
+
+    <!-- Facts & Unverified -->
+    {facts.length > 0 && (
+      <section class="mt-8 rounded-md border border-accent-green/30 bg-green-50/30 p-4 dark:bg-accent-green/5" aria-label="確認できた事実">
+        <h2 class="mb-2 text-sm font-bold text-accent-green">確認できた事実</h2>
+        <ul class="space-y-1">
+          {facts.map((f) => (
+            <li class="text-sm text-navy-700 dark:text-navy-300">{f}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {unverified.length > 0 && (
+      <section class="mt-4 rounded-md border border-accent-amber/30 bg-amber-50/30 p-4 dark:bg-accent-amber/5" aria-label="未確認情報">
+        <h2 class="mb-2 text-sm font-bold text-accent-amber">未確認情報</h2>
+        <ul class="space-y-1">
+          {unverified.map((u) => (
+            <li class="text-sm text-navy-700 dark:text-navy-300">{u}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {editorNote && (
+      <section class="mt-4 rounded-md border border-navy-200 bg-ivory-100 p-4 dark:border-navy-600 dark:bg-navy-800" aria-label="編集部コメント">
+        <h2 class="mb-2 text-sm font-bold text-navy-700 dark:text-ivory-200">編集部コメント</h2>
+        <p class="text-sm text-navy-600 dark:text-navy-400">{editorNote}</p>
+      </section>
+    )}
+
+    <!-- Sources -->
+    <SourceList sources={sources} />
+
+    <!-- Tags -->
+    {tags.length > 0 && (
+      <div class="mt-6 flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <a
+            href={`/tags/${tag}/`}
+            class="rounded-full border border-navy-200 px-3 py-1 text-xs text-navy-600 hover:bg-navy-50 dark:border-navy-600 dark:text-navy-400 dark:hover:bg-navy-800"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- Legal disclaimer -->
+    <div class="mt-8">
+      <LegalDisclaimer />
+    </div>
+
+    <!-- Related articles -->
+    <RelatedArticles articles={relatedArticles} />
+
+    <!-- Newsletter -->
+    <div class="mt-8">
+      <Newsletter />
+    </div>
+  </article>
+</BaseLayout>

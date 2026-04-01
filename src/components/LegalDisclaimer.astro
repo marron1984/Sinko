@@ -1,0 +1,26 @@
+---
+interface Props {
+  type?: 'general' | 'legal' | 'medical' | 'religious';
+}
+
+const { type = 'general' } = Astro.props;
+
+const messages: Record<string, string> = {
+  general:
+    'この記事は一般的な情報提供を目的としており、法律・医療・宗教・心理に関する個別の助言を構成するものではありません。具体的な問題については、専門家にご相談ください。',
+  legal:
+    'この記事に含まれる法律に関する情報は一般的な解説であり、個別の法律相談に代わるものではありません。具体的な法的問題については、弁護士にご相談ください。',
+  medical:
+    'この記事は医療・心理に関する一般的な情報を提供するものであり、診断・治療の助言ではありません。具体的な症状については、医療・心理の専門家にご相談ください。',
+  religious:
+    'この記事は特定の宗教の教義や信仰を評価・否定することを目的としていません。信教の自由は憲法で保障された権利です。',
+};
+---
+
+<aside
+  class="rounded-md border border-navy-200 bg-ivory-100 px-4 py-3 text-xs leading-relaxed text-navy-600 dark:border-navy-600 dark:bg-navy-800 dark:text-navy-400"
+  role="note"
+  aria-label="注意事項"
+>
+  {messages[type]}
+</aside>

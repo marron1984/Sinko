@@ -1,0 +1,80 @@
+---
+import { categories } from '@/lib/categories';
+---
+
+<footer class="mt-20 border-t border-navy-100 bg-navy-50/50 dark:border-navy-700 dark:bg-navy-900">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- About -->
+      <div>
+        <p class="mb-3 font-serif text-lg font-bold text-navy-900 dark:text-ivory-50">信光</p>
+        <p class="text-sm leading-relaxed text-navy-600 dark:text-navy-400">
+          新興宗教をめぐる論点整理・社会背景・制度・報道を扱う調査報道メディアです。
+          事実と出典に基づく情報提供を通じ、公共的議論に資することを目指します。
+        </p>
+      </div>
+
+      <!-- Categories -->
+      <div>
+        <p class="mb-3 text-sm font-bold text-navy-800 dark:text-ivory-100">カテゴリ</p>
+        <ul class="space-y-1.5">
+          {categories.map((cat) => (
+            <li>
+              <a
+                href={`/categories/${cat.slug}/`}
+                class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100"
+              >
+                {cat.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <p class="mb-3 text-sm font-bold text-navy-800 dark:text-ivory-100">資料・ツール</p>
+        <ul class="space-y-1.5">
+          <li><a href="/special/timeline/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">年表</a></li>
+          <li><a href="/special/glossary/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">用語集</a></li>
+          <li><a href="/special/faq/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">FAQ</a></li>
+          <li><a href="/special/support/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">支援窓口</a></li>
+        </ul>
+      </div>
+
+      <!-- Policies -->
+      <div>
+        <p class="mb-3 text-sm font-bold text-navy-800 dark:text-ivory-100">ポリシー</p>
+        <ul class="space-y-1.5">
+          <li><a href="/policies/editorial/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">編集ポリシー</a></li>
+          <li><a href="/policies/corrections/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">訂正ポリシー</a></li>
+          <li><a href="/policies/sources/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">情報源ポリシー</a></li>
+          <li><a href="/policies/advertising/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">広告ポリシー</a></li>
+          <li><a href="/policies/privacy/" class="text-sm text-navy-600 hover:text-navy-900 dark:text-navy-400 dark:hover:text-ivory-100">プライバシーポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="mt-10 rounded-md border border-navy-200 bg-ivory-100 p-4 dark:border-navy-600 dark:bg-navy-800">
+      <p class="text-xs leading-relaxed text-navy-600 dark:text-navy-400">
+        <strong>免責事項：</strong>本サイトの情報は一般的な資料として提供されており、法律・医療・宗教・心理相談の個別助言を構成するものではありません。
+        特定の状況に関する助言が必要な場合は、専門家にご相談ください。
+        掲載情報の正確性には細心の注意を払っておりますが、その完全性・正確性を保証するものではありません。
+        情報の利用により生じた損害について、信光編集部は責任を負いかねます。
+      </p>
+    </div>
+
+    <!-- Bottom -->
+    <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-navy-100 pt-6 dark:border-navy-700 sm:flex-row">
+      <p class="text-xs text-navy-500 dark:text-navy-400">
+        &copy; {new Date().getFullYear()} 信光編集部. All rights reserved.
+      </p>
+      <div class="flex gap-4">
+        <a href="/contact" class="text-xs text-navy-500 hover:text-navy-700 dark:text-navy-400 dark:hover:text-ivory-200">
+          お問い合わせ・訂正依頼
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

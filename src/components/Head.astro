@@ -1,0 +1,77 @@
+---
+import type { SEOProps } from '@/lib/seo';
+import { buildTitle } from '@/lib/seo';
+
+interface Props extends SEOProps {}
+
+const {
+  title,
+  description,
+  ogImage,
+  ogType = 'website',
+  canonicalUrl,
+  publishedAt,
+  updatedAt,
+  author,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = buildTitle(title);
+const siteUrl = Astro.site?.toString() ?? 'https://sinko.jp';
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, siteUrl).toString();
+const ogImg = ogImage ?? `${siteUrl}/images/og-default.png`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- OGP -->
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImg} />
+<meta property="og:site_name" content="信光（Sinko）" />
+<meta property="og:locale" content="ja_JP" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImg} />
+
+{publishedAt && (
+  <meta property="article:published_time" content={publishedAt.toISOString()} />
+)}
+{updatedAt && (
+  <meta property="article:modified_time" content={updatedAt.toISOString()} />
+)}
+{author && <meta name="author" content={author} />}
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Dark mode script (inline to avoid FOUC) -->
+<script is:inline>
+  (function() {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+</script>

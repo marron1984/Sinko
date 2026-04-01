@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="訂正ポリシー"
+  description="信光の訂正・修正方針、誤情報への対応手順、訂正依頼の方法について説明します。"
+>
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'ポリシー' }, { label: '訂正ポリシー' }]} />
+
+    <article class="prose">
+      <h1>訂正ポリシー</h1>
+      <p class="text-sm text-navy-500 dark:text-navy-400">最終更新: 2026年3月1日</p>
+
+      <h2>1. 訂正の基本方針</h2>
+      <p>
+        信光は、掲載情報の正確性に最大限の注意を払いますが、誤りが生じる可能性を排除できません。
+        誤りを発見した場合は速やかに訂正し、その経緯を透明に公開します。
+      </p>
+
+      <h2>2. 訂正の種類</h2>
+      <ul>
+        <li><strong>軽微な修正</strong>：誤字脱字、リンク切れ等。修正履歴は記事に記載しません。</li>
+        <li><strong>事実関係の訂正</strong>：事実認識の誤り、数値の間違い等。記事内に訂正注記を掲載します。</li>
+        <li><strong>重大な訂正</strong>：記事の結論や主要な論点に影響する誤り。記事冒頭に訂正注記を掲載し、訂正一覧ページにも記録します。</li>
+        <li><strong>記事の撤回</strong>：記事全体の信頼性が損なわれた場合。理由を明記のうえ、撤回します。</li>
+      </ul>
+
+      <h2>3. 訂正依頼の方法</h2>
+      <p>
+        記事の内容に誤りを見つけた方は、以下の方法でご連絡ください：
+      </p>
+      <ul>
+        <li><a href="/contact">お問い合わせフォーム</a>（推奨）</li>
+        <li>各記事下部の「訂正依頼」リンク</li>
+      </ul>
+      <p>
+        訂正依頼には、以下の情報を含めていただけると迅速に対応できます：
+      </p>
+      <ul>
+        <li>対象記事のURL</li>
+        <li>誤りと考えられる箇所の引用</li>
+        <li>正しいと考えられる情報とその根拠（出典）</li>
+      </ul>
+
+      <h2>4. 対応期間</h2>
+      <p>
+        訂正依頼を受け取ってから、原則として5営業日以内に事実確認を行い、
+        対応の要否と結果をご連絡します。
+      </p>
+    </article>
+  </div>
+</BaseLayout>

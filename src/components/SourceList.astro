@@ -1,0 +1,44 @@
+---
+interface Source {
+  id: string;
+  label: string;
+  url?: string;
+  accessedAt?: string;
+}
+
+interface Props {
+  sources: Source[];
+}
+
+const { sources } = Astro.props;
+---
+
+{sources.length > 0 && (
+  <section class="mt-10 border-t border-navy-100 pt-6 dark:border-navy-700" aria-label="出典・参考文献">
+    <h2 class="mb-4 font-serif text-lg font-bold text-navy-900 dark:text-ivory-50">出典・参考文献</h2>
+    <ol class="space-y-2">
+      {sources.map((source) => (
+        <li id={`source-${source.id}`} class="text-sm text-navy-600 dark:text-navy-400">
+          <span class="mr-1 font-mono text-xs text-navy-400 dark:text-navy-500">[{source.id}]</span>
+          {source.url ? (
+            <a
+              href={source.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-navy-600 underline underline-offset-2 hover:text-navy-800 dark:text-navy-300 dark:hover:text-ivory-100"
+            >
+              {source.label}
+            </a>
+          ) : (
+            <span>{source.label}</span>
+          )}
+          {source.accessedAt && (
+            <span class="ml-1 text-xs text-navy-400 dark:text-navy-500">
+              （{source.accessedAt} 閲覧）
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}

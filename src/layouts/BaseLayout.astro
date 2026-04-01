@@ -1,0 +1,31 @@
+---
+import Head from '@/components/Head.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import type { SEOProps } from '@/lib/seo';
+import '@/styles/global.css';
+
+interface Props extends SEOProps {
+  jsonLd?: object | object[];
+}
+
+const { jsonLd, ...seoProps } = Astro.props;
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="ja" class="scroll-smooth">
+  <head>
+    <Head {...seoProps} />
+    {jsonLdArray.map((ld) => (
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    ))}
+  </head>
+  <body class="flex min-h-screen flex-col font-sans antialiased">
+    <Header />
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
