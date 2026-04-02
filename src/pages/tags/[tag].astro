@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => data.status === 'published');
+
+  const tagMap = new Map<string, typeof articles>();
+  for (const article of articles) {
+    for (const tag of article.data.tags) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(article);
+    }
+  }
+
+  return [...tagMap.entries()].map(([tag, articles]) => ({
+    params: { tag },
+    props: {
+      tag,
+      articles: articles.sort(
+        (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
+      ),
+    },
+  }));
+}
+
+const { tag, articles } = Astro.props;
+---
+
+<BaseLayout
+  title={`#${tag} の記事一覧`}
+  description={`「${tag}」タグが付けられた記事の一覧です。`}
+>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'タグ' }, { label: `#${tag}` }]} />
+
+    <header class="mb-8">
+      <h1 class="mb-2 font-serif text-2xl font-bold text-navy-900 dark:text-ivory-50">
+        #{tag}
+      </h1>
+      <p class="text-navy-600 dark:text-navy-400">
+        {articles.length}件の記事
+      </p>
+    </header>
+
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((article: any) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          slug={article.id}
+          category={article.data.category}
+          publishedAt={article.data.publishedAt}
+          updatedAt={article.data.updatedAt}
+          tags={article.data.tags}
+          summary={article.data.summary}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
